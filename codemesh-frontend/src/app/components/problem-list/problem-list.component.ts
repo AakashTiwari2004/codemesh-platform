@@ -26,8 +26,7 @@ export class ProblemListComponent implements OnInit {
   constructor(private readonly api: ApiService) {}
 
   ngOnInit(): void {
-    const token = localStorage.getItem('token') ?? undefined;
-    this.api.getProblems(token).subscribe({
+    this.api.getProblems().subscribe({
       next: (data) => {
         this.problems = data;
       },

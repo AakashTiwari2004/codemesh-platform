@@ -36,8 +36,7 @@ export class ProblemDetailComponent {
   }
 
   loadProblem(id: number): void {
-    const token = localStorage.getItem('token') ?? undefined;
-    this.api.getProblemById(id, token).subscribe({
+    this.api.getProblemById(id).subscribe({
       next: (data) => {
         this.problem = data;
       },

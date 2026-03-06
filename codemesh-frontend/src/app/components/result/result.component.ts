@@ -39,8 +39,7 @@ export class ResultComponent {
       return;
     }
 
-    const token = localStorage.getItem('token') ?? undefined;
-    this.api.getSubmissionById(id, token).subscribe({
+    this.api.getSubmissionById(id).subscribe({
       next: (result) => {
         this.submission = result;
       },

@@ -1,23 +1,33 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService, UserSession } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
   template: `
     <nav class="topnav">
-      <a routerLink="/problems" routerLinkActive="active">Problems</a>
-      <a routerLink="/login" routerLinkActive="active">Login</a>
-      <a routerLink="/signup" routerLinkActive="active">Signup</a>
-      <button (click)="logout()">Logout</button>
+      <a *ngIf="isAuthenticated" routerLink="/problems" routerLinkActive="active">Problems</a>
+      <a *ngIf="!isAuthenticated" routerLink="/login" routerLinkActive="active">Login</a>
+      <a *ngIf="!isAuthenticated" routerLink="/signup" routerLinkActive="active">Signup</a>
+      <span *ngIf="isAuthenticated">Signed in as {{ username }}</span>
+      <button *ngIf="isAuthenticated" (click)="logout()">Logout</button>
     </nav>
     <router-outlet></router-outlet>
   `
 })
 export class AppComponent {
-  constructor(private readonly router: Router) {}
+  isAuthenticated = false;
+  username = '';
+
+  constructor(private readonly router: Router, private readonly auth: AuthService) {
+    this.auth.session$.subscribe((session: UserSession | null) => {
+      this.isAuthenticated = session !== null;
+      this.username = session?.username ?? '';
+    });
+  }
 
   logout(): void {
-    localStorage.removeItem('token');
+    this.auth.logout();
     this.router.navigate(['/login']);
   }
 }

@@ -93,3 +93,8 @@ textarea {
   color: #ffffff;
   font-weight: 600;
 }
+
+.topnav span {
+  margin-left: auto;
+  color: #cbd5e1;
+}

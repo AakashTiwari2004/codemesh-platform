@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-submission',
@@ -35,10 +36,10 @@ export class SubmissionComponent {
   error = '';
   loading = false;
   problemId = 0;
-  userId = 1;
 
   constructor(
     private readonly api: ApiService,
+    private readonly auth: AuthService,
     private readonly route: ActivatedRoute,
     private readonly router: Router
   ) {
@@ -54,11 +55,17 @@ export class SubmissionComponent {
 
     this.loading = true;
     this.error = '';
-    const token = localStorage.getItem('token') ?? undefined;
+    const userId = this.auth.getCurrentUserId();
+    if (!userId) {
+      this.loading = false;
+      this.error = 'Session expired. Please login again.';
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.api
       .submitSolution(
-        { userId: this.userId, problemId: this.problemId, code: this.code, language: this.language },
-        token
+        { userId, problemId: this.problemId, code: this.code, language: this.language }
       )
       .subscribe({
         next: (submission) => {

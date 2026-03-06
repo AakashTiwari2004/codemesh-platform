@@ -6,15 +6,17 @@ import { ProblemListComponent } from './components/problem-list/problem-list.com
 import { ProblemDetailComponent } from './components/problem-detail/problem-detail.component';
 import { SubmissionComponent } from './components/submission/submission.component';
 import { ResultComponent } from './components/result/result.component';
+import { AuthGuard } from './guards/auth.guard';
+import { GuestGuard } from './guards/guest.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'signup', component: SignupComponent },
-  { path: 'problems', component: ProblemListComponent },
-  { path: 'problems/:id', component: ProblemDetailComponent },
-  { path: 'submit/:id', component: SubmissionComponent },
-  { path: 'result/:id', component: ResultComponent },
+  { path: 'login', component: LoginComponent, canActivate: [GuestGuard] },
+  { path: 'signup', component: SignupComponent, canActivate: [GuestGuard] },
+  { path: 'problems', component: ProblemListComponent, canActivate: [AuthGuard] },
+  { path: 'problems/:id', component: ProblemDetailComponent, canActivate: [AuthGuard] },
+  { path: 'submit/:id', component: SubmissionComponent, canActivate: [AuthGuard] },
+  { path: 'result/:id', component: ResultComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: 'login' }
 ];
 

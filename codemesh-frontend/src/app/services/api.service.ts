@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface LoginRequest {
@@ -55,28 +55,23 @@ export class ApiService {
     return this.http.post(`${this.gatewayUrl}/auth/signup`, data, { responseType: 'text' });
   }
 
-  getProblems(token?: string): Observable<Problem[]> {
-    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : undefined;
-    return this.http.get<Problem[]>(`${this.gatewayUrl}/problems`, { headers });
+  getProblems(): Observable<Problem[]> {
+    return this.http.get<Problem[]>(`${this.gatewayUrl}/problems`);
   }
 
-  getProblemById(id: number, token?: string): Observable<Problem> {
-    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : undefined;
-    return this.http.get<Problem>(`${this.gatewayUrl}/problems/${id}`, { headers });
+  getProblemById(id: number): Observable<Problem> {
+    return this.http.get<Problem>(`${this.gatewayUrl}/problems/${id}`);
   }
 
-  submitSolution(submission: SubmissionRequest, token?: string): Observable<Submission> {
-    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : undefined;
-    return this.http.post<Submission>(`${this.gatewayUrl}/submissions`, submission, { headers });
+  submitSolution(submission: SubmissionRequest): Observable<Submission> {
+    return this.http.post<Submission>(`${this.gatewayUrl}/submissions`, submission);
   }
 
-  getSubmissionById(id: number, token?: string): Observable<Submission> {
-    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : undefined;
-    return this.http.get<Submission>(`${this.gatewayUrl}/submissions/${id}`, { headers });
+  getSubmissionById(id: number): Observable<Submission> {
+    return this.http.get<Submission>(`${this.gatewayUrl}/submissions/${id}`);
   }
 
-  runCode(submission: { code: string; language: string }, token?: string): Observable<RunCodeResponse> {
-    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : undefined;
-    return this.http.post<RunCodeResponse>(`${this.gatewayUrl}/execute`, submission, { headers });
+  runCode(submission: { code: string; language: string }): Observable<RunCodeResponse> {
+    return this.http.post<RunCodeResponse>(`${this.gatewayUrl}/execute`, submission);
   }
 }

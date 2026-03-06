@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -36,13 +36,13 @@ export class SignupComponent {
   error = '';
   loading = false;
 
-  constructor(private readonly api: ApiService, private readonly router: Router) {}
+  constructor(private readonly auth: AuthService, private readonly router: Router) {}
 
   signup(): void {
     this.loading = true;
     this.success = '';
     this.error = '';
-    this.api.signup({ username: this.username, email: this.email, password: this.password }).subscribe({
+    this.auth.signup({ username: this.username, email: this.email, password: this.password }).subscribe({
       next: (message: string) => {
         this.loading = false;
         if (message.includes('already exists')) {
