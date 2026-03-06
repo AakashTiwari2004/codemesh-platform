@@ -1,6 +1,6 @@
 # CodeMesh Platform
 
-CodeMesh is a full-stack coding platform inspired by online judge workflows (LeetCode-style), built with Java microservices, an Angular frontend, Dockerized local development, and AWS-ready deployment assets.
+CodeMesh is a full-stack coding platform inspired by online judge workflows, built with Java microservices, an Angular frontend, Dockerized local development, and AWS-ready deployment assets.
 
 This project demonstrates practical work aligned with the following engineering direction:
 
@@ -104,9 +104,9 @@ Supported target patterns in repository docs/scripts:
 - ECS/Fargate-oriented workflow via Jenkins + Terraform
 - S3 + CloudFront path for Angular hosting (documented)
 
-## JD Fit Assessment
+## Fit Assessment
 
-Target JD: Java + Angular + Microservices + AWS + Jenkins CI/CD + scalable systems.
+Target : Java + Angular + Microservices + AWS + Jenkins CI/CD + scalable systems.
 
 Current fit status:
 
@@ -117,14 +117,13 @@ Current fit status:
 - AWS deployment readiness: `Good`
 - Production-grade scale/security/observability depth: `Partial`
 
-Overall: **Yes, this project substantially satisfies the JD for an application/interview portfolio.**
 
-## What To Add For Even Better JD Match
+## What To Add For improvement
 
 1. Add automated backend/frontend test suites in CI gates (unit + integration + E2E).
 2. Add observability stack (centralized logs, metrics, tracing, alerts).
 3. Add stronger security hardening (secret rotation, rate limits, WAF, stricter CORS).
-4. Add autoscaling and load testing evidence for ìscalable systemsî claims.
+4. Add autoscaling and load testing evidence for ‚Äúscalable systems‚Äù claims.
 5. Add architecture diagram and SLA/SLO notes in docs.
 
 ## Repo Structure
