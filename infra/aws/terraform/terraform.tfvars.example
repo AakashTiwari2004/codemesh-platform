@@ -1,0 +1,19 @@
+project_name       = "codemesh"
+aws_region         = "ap-south-1"
+vpc_id             = "vpc-xxxxxxxx"
+public_subnet_ids  = ["subnet-public-a", "subnet-public-b"]
+private_subnet_ids = ["subnet-private-a", "subnet-private-b"]
+
+image_tag         = "latest"
+ecs_desired_count = 1
+
+db_engine           = "postgres"
+db_instance_class   = "db.t3.micro"
+db_allocated_storage = 20
+db_name             = "codemesh"
+db_master_username  = "codemesh_admin"
+
+route53_zone_id      = "ZXXXXXXXXXXXXX"
+api_domain_name      = "api.example.com"
+frontend_domain_name = "app.example.com"
+acm_certificate_arn  = "arn:aws:acm:us-east-1:123456789012:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"

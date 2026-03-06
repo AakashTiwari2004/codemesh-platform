@@ -1,0 +1,39 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+      routes:
+        - id: auth
+          uri: http://auth-service:8080
+          predicates:
+            - Path=/auth/**
+
+        - id: problem
+          uri: http://problem-service:8081
+          predicates:
+            - Path=/problems/**
+
+        - id: submission
+          uri: http://submission-service:8082
+          predicates:
+            - Path=/submissions/**
+
+        - id: execution
+          uri: http://execution-service:8083
+          predicates:
+            - Path=/execute/**
