@@ -8,6 +8,7 @@ import { SubmissionComponent } from './components/submission/submission.componen
 import { ResultComponent } from './components/result/result.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'problems', component: ProblemListComponent },

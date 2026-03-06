@@ -1,5 +1,17 @@
-<h2>Login</h2>
-<input type="text" [(ngModel)]="username" placeholder="Username">
-<input type="password" [(ngModel)]="password" placeholder="Password">
-<button (click)="login()">Login</button>
-<p>{{error}}</p>
+<div class="container">
+  <div class="card">
+    <h2>Login</h2>
+    <label for="username">Username</label>
+    <input id="username" type="text" [(ngModel)]="username" placeholder="Enter username" />
+
+    <label for="password">Password</label>
+    <input id="password" type="password" [(ngModel)]="password" placeholder="Enter password" />
+
+    <button class="btn" (click)="login()" [disabled]="loading || !username || !password">
+      {{ loading ? 'Logging in...' : 'Login' }}
+    </button>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+    <p>New user? <a routerLink="/signup">Create account</a></p>
+  </div>
+</div>
