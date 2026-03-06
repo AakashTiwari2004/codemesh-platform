@@ -21,11 +21,17 @@ public class ProblemService {
     }
 
     public List<Problem> getAll() {
-        return problemRepository.findAll();
+        return problemRepository.findAll().stream()
+                .filter(this::isJudgeReady)
+                .toList();
     }
 
     public Problem getById(@NonNull Long id) {
-        return problemRepository.findById(id).orElse(null);
+        Problem problem = problemRepository.findById(id).orElse(null);
+        if (problem == null || !isJudgeReady(problem)) {
+            return null;
+        }
+        return problem;
     }
 
     public Problem update(@NonNull Long id, @NonNull Problem p) {
@@ -38,5 +44,19 @@ public class ProblemService {
 
     public void delete(@NonNull Long id) {
         problemRepository.deleteById(id);
+    }
+
+    private boolean isJudgeReady(Problem problem) {
+        return nonBlank(problem.getTitle())
+                && nonBlank(problem.getDescription())
+                && nonBlank(problem.getMotive())
+                && nonBlank(problem.getStarterCode())
+                && nonBlank(problem.getSampleInput())
+                && nonBlank(problem.getSampleOutput())
+                && nonBlank(problem.getTestCases());
+    }
+
+    private boolean nonBlank(String value) {
+        return value != null && !value.isBlank();
     }
 }

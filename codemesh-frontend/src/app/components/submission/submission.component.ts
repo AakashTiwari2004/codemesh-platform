@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { ApiService } from '../../services/api.service';
+import { Component, OnInit } from '@angular/core';
+import { ApiService, Problem } from '../../services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
@@ -10,12 +10,13 @@ import { AuthService } from '../../services/auth.service';
       <div class="card">
         <h2>Submit Solution</h2>
         <p>Problem ID: {{ problemId }}</p>
+        <p *ngIf="problem"><strong>{{ problem.title }}</strong> <span class="pill">{{ problem.difficulty || 'Easy' }}</span></p>
+        <p class="hint" *ngIf="problem?.motive">{{ problem?.motive }}</p>
+        <p class="hint">Judge currently supports Java. Submit full <code>Main</code> class.</p>
 
         <label for="language">Language</label>
         <select id="language" [(ngModel)]="language">
           <option value="java">Java</option>
-          <option value="python">Python</option>
-          <option value="cpp">C++</option>
         </select>
 
         <label for="code">Code</label>
@@ -30,12 +31,13 @@ import { AuthService } from '../../services/auth.service';
     </div>
   `
 })
-export class SubmissionComponent {
+export class SubmissionComponent implements OnInit {
   code = '';
   language = 'java';
   error = '';
   loading = false;
   problemId = 0;
+  problem: Problem | null = null;
 
   constructor(
     private readonly api: ApiService,
@@ -45,6 +47,24 @@ export class SubmissionComponent {
   ) {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.problemId = Number.isNaN(id) ? 0 : id;
+  }
+
+  ngOnInit(): void {
+    if (this.problemId <= 0) {
+      return;
+    }
+
+    this.api.getProblemById(this.problemId).subscribe({
+      next: (problem) => {
+        this.problem = problem;
+        if (!this.code && problem.starterCode) {
+          this.code = problem.starterCode;
+        }
+      },
+      error: () => {
+        this.error = 'Unable to load problem details';
+      }
+    });
   }
 
   submit(): void {

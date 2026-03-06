@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-signup',
@@ -41,6 +43,10 @@ import { AuthService } from '../../services/auth.service';
           {{ loading ? 'Creating account...' : 'Signup' }}
         </button>
 
+        <p class="hint">
+          Your account is stored in Auth Service database: <strong>MySQL -> judge.users</strong>.
+          Login supports <strong>username or email</strong>.
+        </p>
         <p class="success" *ngIf="success">{{ success }}</p>
         <p class="error" *ngIf="error">{{ error }}</p>
         <p class="hint">Already have an account? <a routerLink="/login">Login</a></p>
@@ -61,7 +67,11 @@ export class SignupComponent {
   error = '';
   loading = false;
 
-  constructor(private readonly auth: AuthService, private readonly router: Router) {
+  constructor(
+    private readonly auth: AuthService,
+    private readonly api: ApiService,
+    private readonly router: Router
+  ) {
     this.generateChallenge();
   }
 
@@ -94,16 +104,36 @@ export class SignupComponent {
     this.auth.signup({ username: this.username, email: this.email, password: this.password }).subscribe({
       next: (message: string) => {
         this.loading = false;
-        if (message.includes('already exists')) {
+        if (
+          message.includes('already exists') ||
+          message.includes('required')
+        ) {
           this.error = message;
           return;
         }
         this.success = message || 'Signup successful!';
-        setTimeout(() => this.router.navigate(['/login']), 1000);
+        setTimeout(
+          () => this.router.navigate(['/login'], { queryParams: { signup: 'success', username: this.username } }),
+          1200
+        );
       },
-      error: () => {
+      error: (err: HttpErrorResponse) => {
         this.loading = false;
-        this.error = 'Signup failed. Try again.';
+        const backendText =
+          typeof err.error === 'string'
+            ? err.error
+            : (err.error?.message as string | undefined) ||
+              (err.error?.error as string | undefined);
+
+        if (backendText) {
+          this.error = backendText;
+        } else if (err.status === 0) {
+          this.error = `Cannot reach server at ${this.api.getBaseUrl()}. Ensure API gateway is reachable from this browser host.`;
+        } else if (err.status >= 500) {
+          this.error = 'Server error during signup. Try a different username/email and retry.';
+        } else {
+          this.error = 'Signup failed. Please check details and try again.';
+        }
         this.generateChallenge();
       }
     });

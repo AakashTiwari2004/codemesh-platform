@@ -7,8 +7,20 @@ import { ActivatedRoute, Router } from '@angular/router';
   template: `
     <div class="container">
       <div class="card" *ngIf="problem; else loadingOrError">
-        <h2>{{ problem.title }}</h2>
+        <h2>{{ problem.title }} <span class="pill">{{ problem.difficulty || 'Easy' }}</span></h2>
+        <p class="hint" *ngIf="problem.motive"><strong>Why this matters:</strong> {{ problem.motive }}</p>
         <p>{{ problem.description }}</p>
+
+        <h3>Sample Input</h3>
+        <pre>{{ problem.sampleInput || 'N/A' }}</pre>
+
+        <h3>Sample Output</h3>
+        <pre>{{ problem.sampleOutput || 'N/A' }}</pre>
+
+        <h3>Starter Code</h3>
+        <pre>{{ problem.starterCode || 'No starter code' }}</pre>
+
+        <p class="hint">Judge currently supports Java submissions.</p>
         <button class="btn" (click)="goToSubmit()">Solve This Problem</button>
       </div>
       <ng-template #loadingOrError>

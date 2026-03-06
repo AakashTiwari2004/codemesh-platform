@@ -10,8 +10,8 @@
   <section class="card auth-panel">
     <h2>Welcome back</h2>
 
-    <label for="username">Username</label>
-    <input id="username" type="text" [(ngModel)]="username" placeholder="Enter username" />
+    <label for="username">Username or Email</label>
+    <input id="username" type="text" [(ngModel)]="username" placeholder="Enter username or email" />
 
     <label for="password">Password</label>
     <input id="password" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" placeholder="Enter password" />
@@ -34,6 +34,7 @@
       {{ loading ? 'Logging in...' : 'Login' }}
     </button>
 
+    <p class="success" *ngIf="info">{{ info }}</p>
     <p class="error" *ngIf="error">{{ error }}</p>
     <p class="hint">New user? <a routerLink="/signup">Create account</a></p>
   </section>

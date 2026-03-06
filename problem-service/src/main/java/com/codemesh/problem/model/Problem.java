@@ -19,9 +19,32 @@ public class Problem {
     @Column(nullable = false)
     private String title;
 
-    @Lob
     @Column(nullable = false)
+    private String difficulty = "Easy";
+
+    @Lob
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    private String motive;
+
+    @Lob
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String description;
+
+    @Lob
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    private String starterCode;
+
+    @Lob
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    private String sampleInput;
+
+    @Lob
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    private String sampleOutput;
+
+    @Lob
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    private String testCases;
 
     public Long getId() {
         return id;
@@ -45,5 +68,53 @@ public class Problem {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public String getMotive() {
+        return motive;
+    }
+
+    public void setMotive(String motive) {
+        this.motive = motive;
+    }
+
+    public String getStarterCode() {
+        return starterCode;
+    }
+
+    public void setStarterCode(String starterCode) {
+        this.starterCode = starterCode;
+    }
+
+    public String getSampleInput() {
+        return sampleInput;
+    }
+
+    public void setSampleInput(String sampleInput) {
+        this.sampleInput = sampleInput;
+    }
+
+    public String getSampleOutput() {
+        return sampleOutput;
+    }
+
+    public void setSampleOutput(String sampleOutput) {
+        this.sampleOutput = sampleOutput;
+    }
+
+    public String getTestCases() {
+        return testCases;
+    }
+
+    public void setTestCases(String testCases) {
+        this.testCases = testCases;
     }
 }

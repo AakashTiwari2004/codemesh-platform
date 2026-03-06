@@ -16,7 +16,13 @@ export interface SignupRequest {
 export interface Problem {
   id: number;
   title: string;
+  difficulty?: string;
+  motive?: string;
   description: string;
+  starterCode?: string;
+  sampleInput?: string;
+  sampleOutput?: string;
+  testCases?: string;
 }
 
 export interface SubmissionRequest {
@@ -43,9 +49,30 @@ export interface RunCodeResponse {
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private readonly gatewayUrl = 'http://localhost:8080';
+  private readonly gatewayUrl = this.resolveGatewayUrl();
 
   constructor(private readonly http: HttpClient) {}
+
+  getBaseUrl(): string {
+    return this.gatewayUrl;
+  }
+
+  private resolveGatewayUrl(): string {
+    const globalOverride = (window as unknown as { __CODEMESH_API_URL__?: string }).__CODEMESH_API_URL__;
+    const storageOverride = localStorage.getItem('codemesh.apiBaseUrl');
+    const override = (globalOverride || storageOverride || '').trim();
+    if (override) {
+      return override.replace(/\/+$/, '');
+    }
+
+    const host = window.location.hostname;
+    if (host === 'localhost' || host === '127.0.0.1') {
+      return 'http://localhost:8080';
+    }
+
+    // For EC2/public-IP usage: frontend on host X, gateway expected at X:8080.
+    return `http://${host}:8080`;
+  }
 
   login(data: LoginRequest): Observable<string> {
     return this.http.post(`${this.gatewayUrl}/auth/login`, data, { responseType: 'text' });

@@ -20,14 +20,14 @@ public class ExecutionLog {
     private Long id;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String code;
 
     @Column(nullable = false)
     private String status;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String output;
 
     @Column(nullable = false)

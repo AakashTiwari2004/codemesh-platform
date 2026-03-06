@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -14,11 +14,26 @@ export class LoginComponent {
   humanAnswer = '';
   challengeText = '';
   private expectedAnswer = 0;
+  info = '';
   error = '';
   loading = false;
 
-  constructor(private readonly auth: AuthService, private readonly router: Router) {
+  constructor(
+    private readonly auth: AuthService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
+  ) {
     this.generateChallenge();
+    this.route.queryParamMap.subscribe((params) => {
+      const signupDone = params.get('signup') === 'success';
+      const username = params.get('username');
+      if (signupDone) {
+        this.info = 'Account created successfully. You can login using username or email.';
+      }
+      if (username) {
+        this.username = username;
+      }
+    });
   }
 
   private generateChallenge(): void {
@@ -44,6 +59,7 @@ export class LoginComponent {
       return;
     }
 
+    this.info = '';
     this.error = '';
     this.loading = true;
     this.auth.login({ username: this.username, password: this.password }).subscribe({

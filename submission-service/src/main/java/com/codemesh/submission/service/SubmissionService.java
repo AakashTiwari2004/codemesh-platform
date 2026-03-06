@@ -32,9 +32,10 @@ public class SubmissionService {
 
         String executionUrl = "http://execution-service:8083/execute";
 
-        Map<String, String> request = new HashMap<>();
+        Map<String, Object> request = new HashMap<>();
         request.put("code", submission.getCode());
         request.put("language", submission.getLanguage());
+        request.put("problemId", submission.getProblemId());
 
         ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                 executionUrl,

@@ -20,7 +20,7 @@ public class ExecutionController {
 
     // POST http://localhost:8083/execute
     @PostMapping
-    public ResponseEntity<Map<String, String>> runCode(@RequestBody Map<String, String> submission) {
+    public ResponseEntity<Map<String, String>> runCode(@RequestBody Map<String, Object> submission) {
         Map<String, String> response = executionService.runCode(submission);
         return ResponseEntity.ok(response);
     }

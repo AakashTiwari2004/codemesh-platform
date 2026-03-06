@@ -13,7 +13,8 @@ import { ApiService, Problem } from '../../services/api.service';
       </div>
 
       <div class="card" *ngFor="let problem of problems">
-        <h3>{{ problem.title }}</h3>
+        <h3>{{ problem.title }} <span class="pill">{{ problem.difficulty || 'Easy' }}</span></h3>
+        <p class="hint" *ngIf="problem.motive"><strong>Motive:</strong> {{ problem.motive }}</p>
         <p>{{ problem.description }}</p>
         <a class="btn-secondary" [routerLink]="['/problems', problem.id]">Open Problem</a>
       </div>

@@ -23,7 +23,7 @@ public class Submission {
     private Long problemId;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String code;
 
     @Column(nullable = false)
@@ -33,7 +33,7 @@ public class Submission {
     private String status;
 
     @Lob
-    @Column
+    @Column(columnDefinition = "LONGTEXT")
     private String output;
 
     public Long getId() {
