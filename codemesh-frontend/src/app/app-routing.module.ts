@@ -10,7 +10,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { GuestGuard } from './guards/guest.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'signup', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [GuestGuard] },
   { path: 'signup', component: SignupComponent, canActivate: [GuestGuard] },
   { path: 'problems', component: ProblemListComponent, canActivate: [AuthGuard] },
