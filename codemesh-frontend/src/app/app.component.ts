@@ -6,6 +6,7 @@ import { AuthService, UserSession } from './services/auth.service';
   selector: 'app-root',
   template: `
     <nav class="topnav">
+      <span class="brand">CodeMesh</span>
       <a *ngIf="isAuthenticated" routerLink="/problems" routerLinkActive="active">Problems</a>
       <a *ngIf="!isAuthenticated" routerLink="/login" routerLinkActive="active">Login</a>
       <a *ngIf="!isAuthenticated" routerLink="/signup" routerLinkActive="active">Signup</a>

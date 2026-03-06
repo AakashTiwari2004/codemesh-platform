@@ -5,9 +5,15 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-signup',
   template: `
-    <div class="container">
-      <div class="card">
-        <h2>Signup</h2>
+    <div class="auth-layout container">
+      <section class="auth-hero">
+        <p class="eyebrow">CodeMesh Judge</p>
+        <h1>Create your coding workspace</h1>
+        <p>Build your profile, solve problems, and track your submissions from one dashboard.</p>
+      </section>
+
+      <section class="card auth-panel">
+        <h2>Create account</h2>
         <label for="username">Username</label>
         <input id="username" type="text" [(ngModel)]="username" placeholder="Choose username" />
 
@@ -15,7 +21,21 @@ import { AuthService } from '../../services/auth.service';
         <input id="email" type="email" [(ngModel)]="email" placeholder="Enter email" />
 
         <label for="password">Password</label>
-        <input id="password" type="password" [(ngModel)]="password" placeholder="Choose password" />
+        <input id="password" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" placeholder="Choose password" />
+        <label class="field-inline" for="show-password-signup">
+          <input id="show-password-signup" type="checkbox" [(ngModel)]="showPassword" />
+          Show password
+        </label>
+
+        <div class="verification-box">
+          <label class="field-inline" for="human-check-signup">
+            <input id="human-check-signup" type="checkbox" [(ngModel)]="humanChecked" />
+            I am human
+          </label>
+          <p class="challenge">Solve: <strong>{{ challengeText }}</strong></p>
+          <input type="number" [(ngModel)]="humanAnswer" placeholder="Enter answer" />
+          <button type="button" class="btn-secondary" (click)="refreshChallenge()">New Challenge</button>
+        </div>
 
         <button class="btn" (click)="signup()" [disabled]="loading || !username || !password">
           {{ loading ? 'Creating account...' : 'Signup' }}
@@ -23,8 +43,8 @@ import { AuthService } from '../../services/auth.service';
 
         <p class="success" *ngIf="success">{{ success }}</p>
         <p class="error" *ngIf="error">{{ error }}</p>
-        <p>Already have an account? <a routerLink="/login">Login</a></p>
-      </div>
+        <p class="hint">Already have an account? <a routerLink="/login">Login</a></p>
+      </section>
     </div>
   `
 })
@@ -32,13 +52,42 @@ export class SignupComponent {
   username = '';
   email = '';
   password = '';
+  showPassword = false;
+  humanChecked = false;
+  humanAnswer = '';
+  challengeText = '';
+  private expectedAnswer = 0;
   success = '';
   error = '';
   loading = false;
 
-  constructor(private readonly auth: AuthService, private readonly router: Router) {}
+  constructor(private readonly auth: AuthService, private readonly router: Router) {
+    this.generateChallenge();
+  }
+
+  private generateChallenge(): void {
+    const a = Math.floor(Math.random() * 8) + 2;
+    const b = Math.floor(Math.random() * 8) + 2;
+    this.expectedAnswer = a + b;
+    this.challengeText = `${a} + ${b}`;
+    this.humanAnswer = '';
+    this.humanChecked = false;
+  }
+
+  refreshChallenge(): void {
+    this.generateChallenge();
+  }
+
+  private isHumanVerified(): boolean {
+    return this.humanChecked && Number(this.humanAnswer) === this.expectedAnswer;
+  }
 
   signup(): void {
+    if (!this.isHumanVerified()) {
+      this.error = 'Please complete human verification';
+      return;
+    }
+
     this.loading = true;
     this.success = '';
     this.error = '';
@@ -55,6 +104,7 @@ export class SignupComponent {
       error: () => {
         this.loading = false;
         this.error = 'Signup failed. Try again.';
+        this.generateChallenge();
       }
     });
   }
